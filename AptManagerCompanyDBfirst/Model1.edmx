@@ -1,0 +1,376 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AptManagerCompanyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Apartman">
+          <Key>
+            <PropertyRef Name="AptNo" />
+          </Key>
+          <Property Name="AptNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AptAd" Type="nvarchar" MaxLength="50" />
+          <Property Name="daireS" Type="int" />
+          <Property Name="katS" Type="int" />
+          <Property Name="adres" Type="nvarchar" MaxLength="50" />
+          <Property Name="asansor" Type="bit" />
+          <Property Name="havuz" Type="bit" />
+          <Property Name="sporS" Type="bit" />
+        </EntityType>
+        <EntityType Name="AptYoneticiler">
+          <Key>
+            <PropertyRef Name="aptNo" />
+          </Key>
+          <Property Name="aptNo" Type="int" Nullable="false" />
+          <Property Name="yoneticiAd" Type="nvarchar" MaxLength="50" />
+          <Property Name="telefon" Type="char" MaxLength="11" />
+          <Property Name="daireNo" Type="int" />
+        </EntityType>
+        <EntityType Name="Calisanlar">
+          <Key>
+            <PropertyRef Name="calisanNo" />
+          </Key>
+          <Property Name="calisanNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="calisanAd" Type="nvarchar" MaxLength="50" />
+          <Property Name="verdigiHizmet" Type="int" />
+          <Property Name="calismaTipi" Type="char" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="Hizmetler">
+          <Key>
+            <PropertyRef Name="hizmetNo" />
+          </Key>
+          <Property Name="hizmetNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="hizmetAdi" Type="nvarchar" MaxLength="50" />
+          <Property Name="hizmetUcret" Type="decimal" Precision="7" Scale="2" />
+        </EntityType>
+        <EntityType Name="Isler">
+          <Key>
+            <PropertyRef Name="isNo" />
+          </Key>
+          <Property Name="isNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="aptNo" Type="int" />
+          <Property Name="calisanNo" Type="int" />
+          <Property Name="hizmetNo" Type="int" />
+          <Property Name="baslangicT" Type="datetime" />
+          <Property Name="bitisT" Type="datetime" />
+          <Property Name="isGün" Type="int" />
+        </EntityType>
+        <EntityType Name="Kullanicilar">
+          <Key>
+            <PropertyRef Name="kullaniciNo" />
+          </Key>
+          <Property Name="kullaniciNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kullaniciAdi" Type="nvarchar" MaxLength="50" />
+          <Property Name="sifre" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_AptYoneticiler_Apartman">
+          <End Role="Apartman" Type="Self.Apartman" Multiplicity="1" />
+          <End Role="AptYoneticiler" Type="Self.AptYoneticiler" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Apartman">
+              <PropertyRef Name="AptNo" />
+            </Principal>
+            <Dependent Role="AptYoneticiler">
+              <PropertyRef Name="aptNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Isler_Apartman">
+          <End Role="Apartman" Type="Self.Apartman" Multiplicity="0..1" />
+          <End Role="Isler" Type="Self.Isler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Apartman">
+              <PropertyRef Name="AptNo" />
+            </Principal>
+            <Dependent Role="Isler">
+              <PropertyRef Name="aptNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Isler_Calisanlar">
+          <End Role="Calisanlar" Type="Self.Calisanlar" Multiplicity="0..1" />
+          <End Role="Isler" Type="Self.Isler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Calisanlar">
+              <PropertyRef Name="calisanNo" />
+            </Principal>
+            <Dependent Role="Isler">
+              <PropertyRef Name="calisanNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Isler_Hizmetler">
+          <End Role="Hizmetler" Type="Self.Hizmetler" Multiplicity="0..1" />
+          <End Role="Isler" Type="Self.Isler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hizmetler">
+              <PropertyRef Name="hizmetNo" />
+            </Principal>
+            <Dependent Role="Isler">
+              <PropertyRef Name="hizmetNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AptManagerCompanyModelStoreContainer">
+          <EntitySet Name="Apartman" EntityType="Self.Apartman" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AptYoneticiler" EntityType="Self.AptYoneticiler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Calisanlar" EntityType="Self.Calisanlar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hizmetler" EntityType="Self.Hizmetler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Isler" EntityType="Self.Isler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kullanicilar" EntityType="Self.Kullanicilar" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AptYoneticiler_Apartman" Association="Self.FK_AptYoneticiler_Apartman">
+            <End Role="Apartman" EntitySet="Apartman" />
+            <End Role="AptYoneticiler" EntitySet="AptYoneticiler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Isler_Apartman" Association="Self.FK_Isler_Apartman">
+            <End Role="Apartman" EntitySet="Apartman" />
+            <End Role="Isler" EntitySet="Isler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Isler_Calisanlar" Association="Self.FK_Isler_Calisanlar">
+            <End Role="Calisanlar" EntitySet="Calisanlar" />
+            <End Role="Isler" EntitySet="Isler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Isler_Hizmetler" Association="Self.FK_Isler_Hizmetler">
+            <End Role="Hizmetler" EntitySet="Hizmetler" />
+            <End Role="Isler" EntitySet="Isler" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AptManagerCompanyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Apartman">
+          <Key>
+            <PropertyRef Name="AptNo" />
+          </Key>
+          <Property Name="AptNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AptAd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="daireS" Type="Int32" />
+          <Property Name="katS" Type="Int32" />
+          <Property Name="adres" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="asansor" Type="Boolean" />
+          <Property Name="havuz" Type="Boolean" />
+          <Property Name="sporS" Type="Boolean" />
+          <NavigationProperty Name="AptYoneticiler" Relationship="Self.FK_AptYoneticiler_Apartman" FromRole="Apartman" ToRole="AptYoneticiler" />
+          <NavigationProperty Name="Islers" Relationship="Self.FK_Isler_Apartman" FromRole="Apartman" ToRole="Isler" />
+        </EntityType>
+        <EntityType Name="AptYoneticiler">
+          <Key>
+            <PropertyRef Name="aptNo" />
+          </Key>
+          <Property Name="aptNo" Type="Int32" Nullable="false" />
+          <Property Name="yoneticiAd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="telefon" Type="String" MaxLength="11" FixedLength="true" Unicode="false" />
+          <Property Name="daireNo" Type="Int32" />
+          <NavigationProperty Name="Apartman" Relationship="Self.FK_AptYoneticiler_Apartman" FromRole="AptYoneticiler" ToRole="Apartman" />
+        </EntityType>
+        <EntityType Name="Calisanlar">
+          <Key>
+            <PropertyRef Name="calisanNo" />
+          </Key>
+          <Property Name="calisanNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="calisanAd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="verdigiHizmet" Type="Int32" />
+          <Property Name="calismaTipi" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Islers" Relationship="Self.FK_Isler_Calisanlar" FromRole="Calisanlar" ToRole="Isler" />
+        </EntityType>
+        <EntityType Name="Hizmetler">
+          <Key>
+            <PropertyRef Name="hizmetNo" />
+          </Key>
+          <Property Name="hizmetNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="hizmetAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="hizmetUcret" Type="Decimal" Precision="7" Scale="2" />
+          <NavigationProperty Name="Islers" Relationship="Self.FK_Isler_Hizmetler" FromRole="Hizmetler" ToRole="Isler" />
+        </EntityType>
+        <EntityType Name="Isler">
+          <Key>
+            <PropertyRef Name="isNo" />
+          </Key>
+          <Property Name="isNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="aptNo" Type="Int32" />
+          <Property Name="calisanNo" Type="Int32" />
+          <Property Name="hizmetNo" Type="Int32" />
+          <Property Name="isGün" Type="Int32" />
+          <NavigationProperty Name="Apartman" Relationship="Self.FK_Isler_Apartman" FromRole="Isler" ToRole="Apartman" />
+          <NavigationProperty Name="Calisanlar" Relationship="Self.FK_Isler_Calisanlar" FromRole="Isler" ToRole="Calisanlar" />
+          <NavigationProperty Name="Hizmetler" Relationship="Self.FK_Isler_Hizmetler" FromRole="Isler" ToRole="Hizmetler" />
+          <Property Name="baslangicT" Type="DateTime" Precision="3" />
+          <Property Name="bitisT" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Kullanicilar">
+          <Key>
+            <PropertyRef Name="kullaniciNo" />
+          </Key>
+          <Property Name="kullaniciNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kullaniciAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sifre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_AptYoneticiler_Apartman">
+          <End Role="Apartman" Type="Self.Apartman" Multiplicity="1" />
+          <End Role="AptYoneticiler" Type="Self.AptYoneticiler" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Apartman">
+              <PropertyRef Name="AptNo" />
+            </Principal>
+            <Dependent Role="AptYoneticiler">
+              <PropertyRef Name="aptNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Isler_Apartman">
+          <End Role="Apartman" Type="Self.Apartman" Multiplicity="0..1" />
+          <End Role="Isler" Type="Self.Isler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Apartman">
+              <PropertyRef Name="AptNo" />
+            </Principal>
+            <Dependent Role="Isler">
+              <PropertyRef Name="aptNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Isler_Calisanlar">
+          <End Role="Calisanlar" Type="Self.Calisanlar" Multiplicity="0..1" />
+          <End Role="Isler" Type="Self.Isler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Calisanlar">
+              <PropertyRef Name="calisanNo" />
+            </Principal>
+            <Dependent Role="Isler">
+              <PropertyRef Name="calisanNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Isler_Hizmetler">
+          <End Role="Hizmetler" Type="Self.Hizmetler" Multiplicity="0..1" />
+          <End Role="Isler" Type="Self.Isler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hizmetler">
+              <PropertyRef Name="hizmetNo" />
+            </Principal>
+            <Dependent Role="Isler">
+              <PropertyRef Name="hizmetNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AptManagerCompanyEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Apartmen" EntityType="Self.Apartman" />
+          <EntitySet Name="AptYoneticilers" EntityType="Self.AptYoneticiler" />
+          <EntitySet Name="Calisanlars" EntityType="Self.Calisanlar" />
+          <EntitySet Name="Hizmetlers" EntityType="Self.Hizmetler" />
+          <EntitySet Name="Islers" EntityType="Self.Isler" />
+          <EntitySet Name="Kullanicilars" EntityType="Self.Kullanicilar" />
+          <AssociationSet Name="FK_AptYoneticiler_Apartman" Association="Self.FK_AptYoneticiler_Apartman">
+            <End Role="Apartman" EntitySet="Apartmen" />
+            <End Role="AptYoneticiler" EntitySet="AptYoneticilers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Isler_Apartman" Association="Self.FK_Isler_Apartman">
+            <End Role="Apartman" EntitySet="Apartmen" />
+            <End Role="Isler" EntitySet="Islers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Isler_Calisanlar" Association="Self.FK_Isler_Calisanlar">
+            <End Role="Calisanlar" EntitySet="Calisanlars" />
+            <End Role="Isler" EntitySet="Islers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Isler_Hizmetler" Association="Self.FK_Isler_Hizmetler">
+            <End Role="Hizmetler" EntitySet="Hizmetlers" />
+            <End Role="Isler" EntitySet="Islers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AptManagerCompanyModelStoreContainer" CdmEntityContainer="AptManagerCompanyEntities">
+          <EntitySetMapping Name="Apartmen">
+            <EntityTypeMapping TypeName="AptManagerCompanyModel.Apartman">
+              <MappingFragment StoreEntitySet="Apartman">
+                <ScalarProperty Name="AptNo" ColumnName="AptNo" />
+                <ScalarProperty Name="AptAd" ColumnName="AptAd" />
+                <ScalarProperty Name="daireS" ColumnName="daireS" />
+                <ScalarProperty Name="katS" ColumnName="katS" />
+                <ScalarProperty Name="adres" ColumnName="adres" />
+                <ScalarProperty Name="asansor" ColumnName="asansor" />
+                <ScalarProperty Name="havuz" ColumnName="havuz" />
+                <ScalarProperty Name="sporS" ColumnName="sporS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AptYoneticilers">
+            <EntityTypeMapping TypeName="AptManagerCompanyModel.AptYoneticiler">
+              <MappingFragment StoreEntitySet="AptYoneticiler">
+                <ScalarProperty Name="aptNo" ColumnName="aptNo" />
+                <ScalarProperty Name="yoneticiAd" ColumnName="yoneticiAd" />
+                <ScalarProperty Name="telefon" ColumnName="telefon" />
+                <ScalarProperty Name="daireNo" ColumnName="daireNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Calisanlars">
+            <EntityTypeMapping TypeName="AptManagerCompanyModel.Calisanlar">
+              <MappingFragment StoreEntitySet="Calisanlar">
+                <ScalarProperty Name="calisanNo" ColumnName="calisanNo" />
+                <ScalarProperty Name="calisanAd" ColumnName="calisanAd" />
+                <ScalarProperty Name="verdigiHizmet" ColumnName="verdigiHizmet" />
+                <ScalarProperty Name="calismaTipi" ColumnName="calismaTipi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Hizmetlers">
+            <EntityTypeMapping TypeName="AptManagerCompanyModel.Hizmetler">
+              <MappingFragment StoreEntitySet="Hizmetler">
+                <ScalarProperty Name="hizmetNo" ColumnName="hizmetNo" />
+                <ScalarProperty Name="hizmetAdi" ColumnName="hizmetAdi" />
+                <ScalarProperty Name="hizmetUcret" ColumnName="hizmetUcret" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Islers">
+            <EntityTypeMapping TypeName="AptManagerCompanyModel.Isler">
+              <MappingFragment StoreEntitySet="Isler">
+                <ScalarProperty Name="bitisT" ColumnName="bitisT" />
+                <ScalarProperty Name="baslangicT" ColumnName="baslangicT" />
+                <ScalarProperty Name="isNo" ColumnName="isNo" />
+                <ScalarProperty Name="aptNo" ColumnName="aptNo" />
+                <ScalarProperty Name="calisanNo" ColumnName="calisanNo" />
+                <ScalarProperty Name="hizmetNo" ColumnName="hizmetNo" />
+                <ScalarProperty Name="isGün" ColumnName="isGün" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kullanicilars">
+            <EntityTypeMapping TypeName="AptManagerCompanyModel.Kullanicilar">
+              <MappingFragment StoreEntitySet="Kullanicilar">
+                <ScalarProperty Name="kullaniciNo" ColumnName="kullaniciNo" />
+                <ScalarProperty Name="kullaniciAdi" ColumnName="kullaniciAdi" />
+                <ScalarProperty Name="sifre" ColumnName="sifre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
